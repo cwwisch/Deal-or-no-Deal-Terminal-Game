@@ -94,7 +94,7 @@ def play_game():
         print("there are only 2 Cases left, the one you chose earlier: {player_case_number}, and one still in play {case_numbers}. Now, you may choose to either keep your case, or trade it for the other".format(player_case_number = player_case_number, case_numbers = case_numbers))
         case_values = list(cases.values())
         trade = input("Would you like to trade?(yes or no)")
-        print(case_values)
+        
         if trade.lower() == "yes":
             print("You have Traded, Congratualtions, you have won {case_value}$, your original case, {player_case_number}, had {player_case_value}$".format(case_value = case_values[0], player_case_number = player_case_number, player_case_value = player_case_value))
         elif trade.lower == "no":
