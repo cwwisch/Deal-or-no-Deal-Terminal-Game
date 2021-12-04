@@ -47,44 +47,54 @@ def get_offer():
     count = 0
     for value in values_in_play:
         count += value
-    return count / len(values_in_play)
+    return round(count / len(values_in_play))
 
 player_case_number = list(player_case_info.keys())
 player_case_value = list(player_case_info.values())
-case_numbers = list(cases.keys())
-case_values = list(cases.values())
+global case_numbers
+global case_values
 
 def play_game():
     print("Alright let's play!")
     for i in range(len(rounds)):
         number_of_cases = list(rounds.values())
         case_choice = number_of_cases[i]
+
         while case_choice > 0:
+            if case_choice == 6:
+                case_numbers = list(cases.keys())
+                print("Cases still in play include: {case_numbers}, Values still in play include: {values_in_play}".format(case_numbers = case_numbers, values_in_play = values_in_play))
+
             players_choice = int(input("Please Choose a Case "))
             if players_choice not in case_numbers:
                 input("that case, either doesn't exist, or is no longer in play, try again your options are, {case_numbers}".format(case_numbers = case_numbers))
+            
             case_value = cases.get(players_choice)
             print("Case {players_choice} contains {case_value}$".format(players_choice = players_choice, case_value = case_value))
             values_in_play.remove(case_value)
-            cases.pop(players_choice)
+            del cases[players_choice]
+            case_numbers = list(cases.keys())
             print("Cases still in play include: {case_numbers}, Values still in play include: {values_in_play}".format(case_numbers = case_numbers, values_in_play = values_in_play))
             case_choice -= 1
+
         current_offer = get_offer()
         print("The Banker's offer is: {current_offer}$".format(current_offer = current_offer))
         deal_or_no_deal = input("Deal or no Deal?")
-        while True:
-            if deal_or_no_deal.lower() != "deal" or deal_or_no_deal.lower() != "no deal":
-                deal_or_no_deal = input("there may have been some typo, make sure to type deal, or no deal without any punctuation.")
-            else:
-                break
+
         if deal_or_no_deal.lower() == "deal":
             print("Congratulations, you have won {current_offer}$".format(current_offer = current_offer))
             break
-        else:
+        elif deal_or_no_deal.lower() == "no deal":
             continue
+        else:
+            deal_or_no_deal = input("there may have been some typo, make sure to type deal, or no deal without any punctuation.")
+
+            
     if i + 1 == len(rounds):
         print("there are only 2 Cases left, the one you chose earlier: {player_case_number}, and one still in play {case_numbers}. Now, you may choose to either keep your case, or trade it for the other".format(player_case_number = player_case_number, case_numbers = case_numbers))
-        trade = input("Would you like to trade?")
+        case_values = list(cases.values())
+        trade = input("Would you like to trade?(yes or no)")
+        print(case_values)
         if trade.lower() == "yes":
             print("You have Traded, Congratualtions, you have won {case_value}$, your original case, {player_case_number}, had {player_case_value}$".format(case_value = case_values[0], player_case_number = player_case_number, player_case_value = player_case_value))
         elif trade.lower == "no":
