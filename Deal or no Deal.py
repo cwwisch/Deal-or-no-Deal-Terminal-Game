@@ -2,8 +2,8 @@ import random
 # this list is used for making each case have a random value that isn't repeated.
 list_options = [0.01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000]
 
-# this list, while exactly the same as the previous one, is used for the seperate purpose of notifying the player of what money values are still in play.
-values_in_play = [0.01, 1, 5, 10, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 50000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000]
+# this list, is used for the seperate purpose of notifying the player of what money values are still in play.
+values_in_play = list_options.copy()
 
 rounds = {"Round 1" : 6, "Round 2" : 5, "Round 3" : 4, "Round 4" : 3, "Round 5" : 2, "Round 6" : 1, "Round 7" : 1, "Round 8" : 1, "Round 9" : 1}
 
@@ -47,7 +47,7 @@ def get_offer():
     count = 0
     for value in values_in_play:
         count += value
-    return round(count / len(values_in_play))
+    return "{:,.2f}".format(count / len(values_in_play))
 
 player_case_number = list(player_case_info.keys())
 player_case_value = list(player_case_info.values())
@@ -79,7 +79,7 @@ def play_game():
 
         current_offer = get_offer()
         print("The Banker's offer is: {current_offer}$".format(current_offer = current_offer))
-        deal_or_no_deal = input("Deal or no Deal?")
+        deal_or_no_deal = input("Deal or no Deal? ")
 
         if deal_or_no_deal.lower() == "deal":
             print("Congratulations, you have won {current_offer}$".format(current_offer = current_offer))
@@ -87,20 +87,23 @@ def play_game():
         elif deal_or_no_deal.lower() == "no deal":
             continue
         else:
-            deal_or_no_deal = input("there may have been some typo, make sure to type deal, or no deal without any punctuation.")
+            deal_or_no_deal = input("there may have been some typo, make sure to type deal, or no deal without any punctuation. ")
 
             
     if i + 1 == len(rounds):
-        print("there are only 2 Cases left, the one you chose earlier: {player_case_number}, and one still in play {case_numbers}. Now, you may choose to either keep your case, or trade it for the other".format(player_case_number = player_case_number, case_numbers = case_numbers))
+        print("there are only 2 Cases left, the one you chose earlier: {player_case_number}, and one still in play {case_numbers}. Now, you may choose to either keep your case, or trade it for the other".format(player_case_number = player_case_number[0], case_numbers = case_numbers[0]))
         case_values = list(cases.values())
+        case_numbers = list(cases.keys())
         trade = input("Would you like to trade?(yes or no)")
         
         if trade.lower() == "yes":
             print("You have Traded, Congratualtions, you have won {case_value}$, your original case, {player_case_number}, had {player_case_value}$".format(case_value = case_values[0], player_case_number = player_case_number, player_case_value = player_case_value))
-        elif trade.lower == "no":
-            print("You have chosen not to trade, Congratualtions, you have won {player_case_value}$, the case still in play, {case_number}, had {case_value}$".format(case_value = case_values[0], player_case_number = player_case_number, player_case_value = player_case_value))
+        elif trade.lower() == "no":
+            print("You have chosen not to trade, Congratualtions, you have won {player_case_value}$, the case still in play, {case_number}, had {case_value}$".format(case_value = case_values[0], case_number = case_numbers[0], player_case_value = player_case_value[0]))
+        else:
+            trade = input("you may have made a typo, please type either yes or no")
+
 
         
 
 play_game()
-
