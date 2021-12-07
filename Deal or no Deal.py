@@ -54,6 +54,12 @@ player_case_value = list(player_case_info.values())
 global case_numbers
 global case_values
 
+def list_cleaner(lst):
+    new_list = []
+    for value in lst:
+        new_list.append({"${:,}".format(value)})
+    return new_list
+
 def play_game():
     print("Alright let's play!")
     for i in range(len(rounds)):
@@ -63,26 +69,26 @@ def play_game():
         while case_choice > 0:
             if case_choice == 6:
                 case_numbers = list(cases.keys())
-                print("Cases still in play include: {case_numbers}, Values still in play include: {values_in_play}".format(case_numbers = case_numbers, values_in_play = values_in_play))
+                print("Cases still in play include: {case_numbers}, Values still in play include: {values_in_play}".format(case_numbers = case_numbers, values_in_play = list_cleaner(values_in_play)))
 
             players_choice = int(input("Please Choose a Case "))
             if players_choice not in case_numbers:
                 input("that case, either doesn't exist, or is no longer in play, try again your options are, {case_numbers}".format(case_numbers = case_numbers))
             
             case_value = cases.get(players_choice)
-            print("Case {players_choice} contains {case_value}$".format(players_choice = players_choice, case_value = case_value))
+            print("Case {players_choice} contains ${case_value}".format(players_choice = players_choice, case_value = "{:,}".format(case_value)))
             values_in_play.remove(case_value)
             del cases[players_choice]
             case_numbers = list(cases.keys())
-            print("Cases still in play include: {case_numbers}, Values still in play include: {values_in_play}".format(case_numbers = case_numbers, values_in_play = values_in_play))
+            print("Cases still in play include: {case_numbers}, Values still in play include: {values_in_play}".format(case_numbers = case_numbers, values_in_play = list_cleaner(values_in_play)))
             case_choice -= 1
 
         current_offer = get_offer()
-        print("The Banker's offer is: {current_offer}$".format(current_offer = current_offer))
+        print("The Banker's offer is: ${current_offer}".format(current_offer = current_offer))
         deal_or_no_deal = input("Deal or no Deal? ")
 
         if deal_or_no_deal.lower() == "deal":
-            print("Congratulations, you have won {current_offer}$".format(current_offer = current_offer))
+            print("Congratulations, you have won ${current_offer}".format(current_offer = current_offer))
             break
         elif deal_or_no_deal.lower() == "no deal":
             continue
@@ -97,9 +103,9 @@ def play_game():
         trade = input("Would you like to trade?(yes or no)")
         
         if trade.lower() == "yes":
-            print("You have Traded, Congratualtions, you have won {case_value}$, your original case, {player_case_number}, had {player_case_value}$".format(case_value = case_values[0], player_case_number = player_case_number, player_case_value = player_case_value))
+            print("You have Traded, Congratualtions, you have won ${case_value}, your original case, {player_case_number}, had ${player_case_value}".format(case_value = case_values[0], player_case_number = player_case_number[0], player_case_value = player_case_value[0]))
         elif trade.lower() == "no":
-            print("You have chosen not to trade, Congratualtions, you have won {player_case_value}$, the case still in play, {case_number}, had {case_value}$".format(case_value = case_values[0], case_number = case_numbers[0], player_case_value = player_case_value[0]))
+            print("You have chosen not to trade, Congratualtions, you have won {player_case_value}$, the case still in play, {case_number}, had {case_value}$".format(case_value = case_values[0], case_number = case_numbers[0], player_case_value = player_case_value))
         else:
             trade = input("you may have made a typo, please type either yes or no")
 
